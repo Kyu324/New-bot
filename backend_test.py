@@ -175,12 +175,19 @@ class DiscordBotAPITester:
 
     def test_get_commands_by_category(self):
         """Test get commands by category"""
-        categories = ["moderation", "server", "roles", "channels", "users", "utility", "fun", "economy"]
+        categories = ["moderation", "server", "roles", "channels", "users", "utility", "fun", "economy", "news"]
         
         results = []
         for category in categories:
             success, data = self.run_test(f"Get Commands - {category.title()}", "GET", f"api/commands/{category}")
             results.append(success)
+            
+            # Special check for news category
+            if category == "news" and success and data:
+                commands = data.get("commands", [])
+                print(f"   📰 News category commands: {len(commands)}")
+                for cmd in commands:
+                    print(f"      • {cmd.get('name')}: {cmd.get('description')}")
         
         return all(results), {}
 
