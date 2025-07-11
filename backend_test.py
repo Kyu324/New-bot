@@ -137,7 +137,41 @@ class DiscordBotAPITester:
 
     def test_get_commands(self):
         """Test get all commands endpoint"""
-        return self.run_test("Get All Commands", "GET", "api/commands")
+        success, data = self.run_test("Get All Commands", "GET", "api/commands")
+        
+        if success and data:
+            # Check if news commands are included
+            commands = data.get("commands", [])
+            total_commands = data.get("total", 0)
+            
+            # Look for news commands
+            news_commands = [cmd for cmd in commands if cmd.get("category") == "news"]
+            
+            print(f"   📊 Total commands found: {total_commands}")
+            print(f"   📰 News commands found: {len(news_commands)}")
+            
+            # Expected news commands
+            expected_news_commands = [
+                "news", "news us", "news uk", "news india", 
+                "news us tech", "news uk business", "news india sports"
+            ]
+            
+            found_news_commands = [cmd.get("name") for cmd in news_commands]
+            print(f"   📝 News commands: {found_news_commands}")
+            
+            # Check if we have the expected total (should be around 142)
+            if total_commands >= 140:
+                print(f"   ✅ Command count looks correct: {total_commands}")
+            else:
+                print(f"   ⚠️  Command count seems low: {total_commands} (expected ~142)")
+            
+            # Check if news commands exist
+            if len(news_commands) >= 6:  # At least 6 news commands
+                print(f"   ✅ News commands found: {len(news_commands)}")
+            else:
+                print(f"   ⚠️  Few news commands found: {len(news_commands)}")
+        
+        return success, data
 
     def test_get_commands_by_category(self):
         """Test get commands by category"""
