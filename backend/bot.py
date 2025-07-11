@@ -11,6 +11,7 @@ import re
 import random
 from typing import Optional, List, Dict, Any
 import aiohttp
+import httpx
 import time
 
 # Setup logging
