@@ -60,14 +60,6 @@ bot = commands.Bot(
     application_id=APPLICATION_ID,
     help_command=None
 )
-    """Get server prefix"""
-    if not message.guild:
-        return "!"
-    
-    server_data = servers_collection.find_one({"server_id": str(message.guild.id)})
-    if server_data:
-        return server_data.get("prefix", "!")
-    return "!"
 
 async def log_command(ctx, command_name, success=True, error=None):
     """Log command execution"""
