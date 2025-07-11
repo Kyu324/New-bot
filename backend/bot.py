@@ -585,6 +585,129 @@ async def daily_reward(ctx):
         await ctx.send(f"❌ Failed to claim daily reward: {str(e)}")
         await log_command(ctx, "daily", False, e)
 
+# NEWS COMMAND
+@bot.command(name='news')
+async def get_news(ctx, country: str = "us", category: str = "general"):
+    """Get news from US, UK, or India"""
+    try:
+        # Map country codes
+        country_map = {
+            "us": "us",
+            "usa": "us",
+            "united states": "us",
+            "america": "us",
+            "uk": "gb",
+            "britain": "gb",
+            "england": "gb",
+            "united kingdom": "gb",
+            "india": "in",
+            "ind": "in"
+        }
+        
+        # Map categories
+        category_map = {
+            "general": "general",
+            "business": "business",
+            "tech": "technology",
+            "technology": "technology",
+            "sports": "sports",
+            "health": "health",
+            "entertainment": "entertainment",
+            "science": "science"
+        }
+        
+        # Validate country
+        country_code = country_map.get(country.lower())
+        if not country_code:
+            await ctx.send("❌ Invalid country! Use: `us`, `uk`, or `india`")
+            return
+        
+        # Validate category
+        category_code = category_map.get(category.lower(), "general")
+        
+        # Country names for display
+        country_names = {
+            "us": "🇺🇸 United States",
+            "gb": "🇬🇧 United Kingdom", 
+            "in": "🇮🇳 India"
+        }
+        
+        # Category emojis
+        category_emojis = {
+            "general": "📰",
+            "business": "💼",
+            "technology": "💻",
+            "sports": "⚽",
+            "health": "🏥",
+            "entertainment": "🎬",
+            "science": "🔬"
+        }
+        
+        # Fetch news from API
+        url = f"https://newsapi.org/v2/top-headlines"
+        params = {
+            "country": country_code,
+            "category": category_code,
+            "pageSize": 5,
+            "apiKey": NEWS_API_KEY
+        }
+        
+        async with httpx.AsyncClient() as client:
+            response = await client.get(url, params=params, timeout=10.0)
+            
+            if response.status_code != 200:
+                await ctx.send(f"❌ Error fetching news: {response.status_code}")
+                return
+            
+            data = response.json()
+            
+            if not data.get("articles"):
+                await ctx.send("❌ No news articles found!")
+                return
+            
+            articles = data["articles"][:5]  # Limit to 5 articles
+            
+            # Create embed
+            embed = discord.Embed(
+                title=f"{category_emojis.get(category_code, '📰')} {category_code.title()} News",
+                description=f"Latest headlines from {country_names.get(country_code, country_code.upper())}",
+                color=discord.Color.blue(),
+                timestamp=datetime.utcnow()
+            )
+            
+            for i, article in enumerate(articles, 1):
+                title = article.get("title", "No title")
+                description = article.get("description", "No description available")
+                url = article.get("url", "")
+                source = article.get("source", {}).get("name", "Unknown")
+                
+                # Truncate title and description to fit embed limits
+                if len(title) > 100:
+                    title = title[:97] + "..."
+                if len(description) > 200:
+                    description = description[:197] + "..."
+                
+                embed.add_field(
+                    name=f"{i}. {title}",
+                    value=f"{description}\n🔗 [Read more]({url}) | 📰 {source}",
+                    inline=False
+                )
+            
+            embed.set_footer(text=f"Powered by NewsAPI | Total articles: {data.get('totalResults', 0)}")
+            
+            await ctx.send(embed=embed)
+            await log_command(ctx, "news", True)
+            
+    except httpx.TimeoutException:
+        await ctx.send("❌ Request timed out. Please try again later.")
+        await log_command(ctx, "news", False, "Timeout")
+    except httpx.HTTPStatusError as e:
+        await ctx.send(f"❌ News API error: {e.response.status_code}")
+        await log_command(ctx, "news", False, f"HTTP {e.response.status_code}")
+    except Exception as e:
+        await ctx.send(f"❌ Failed to get news: {str(e)}")
+        await log_command(ctx, "news", False, e)
+
 # HELP COMMAND
 @bot.command(name='help')
 async def help_command(ctx, category: str = None):
