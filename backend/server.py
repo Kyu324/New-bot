@@ -31,8 +31,8 @@ commands_collection = db.commands
 logs_collection = db.logs
 
 # Bot credentials
-DISCORD_BOT_TOKEN = "MTE2MjA1MzM3OTMxMzM4MTUyOA.Gqbogw.-VgCiUDpRBRHYRj6LOON2HIRcDfXKu7CorjqYw"
-DISCORD_APP_ID = "1162053379313381528"
+DISCORD_BOT_TOKEN = os.environ.get('DISCORD_BOT_TOKEN', 'MTE2MjA1MzM3OTMxMzM4MTUyOA.Gqbogw.-VgCiUDpRBRHYRj6LOON2HIRcDfXKu7CorjqYw')
+DISCORD_APP_ID = os.environ.get('DISCORD_APP_ID', '1162053379313381528')
 
 def start_discord_bot():
     """Start the Discord bot as a subprocess"""
