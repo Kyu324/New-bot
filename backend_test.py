@@ -318,6 +318,11 @@ class DiscordBotAPITester:
         print("-" * 30)
         self.test_invalid_endpoints()
         
+        # News API Integration tests
+        print("\n📰 NEWS API INTEGRATION TESTS")
+        print("-" * 30)
+        self.test_news_api_integration()
+        
         # CORS tests
         print("\n🌐 CORS TESTS")
         print("-" * 30)
