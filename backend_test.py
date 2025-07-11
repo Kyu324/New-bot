@@ -257,6 +257,23 @@ class DiscordBotAPITester:
         else:
             print("   ❌ Backend not accessible for news testing")
             return False, {}
+
+    def test_cors_headers(self):
+        """Test CORS headers are present"""
+        try:
+            response = requests.options(f"{self.base_url}/api/bot/status")
+            cors_headers = [
+                'Access-Control-Allow-Origin',
+                'Access-Control-Allow-Methods',
+                'Access-Control-Allow-Headers'
+            ]
+            
+            has_cors = any(header in response.headers for header in cors_headers)
+            self.log_test("CORS Headers", has_cors, "CORS headers present" if has_cors else "CORS headers missing")
+            return has_cors, {}
+        except Exception as e:
+            self.log_test("CORS Headers", False, f"Error checking CORS: {str(e)}")
+            return False, {}
         """Test CORS headers are present"""
         try:
             response = requests.options(f"{self.base_url}/api/bot/status")
