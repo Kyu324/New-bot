@@ -230,7 +230,33 @@ class DiscordBotAPITester:
         
         return all(results), {}
 
-    def test_cors_headers(self):
+    def test_news_api_integration(self):
+        """Test news API integration and environment setup"""
+        print(f"\n🔍 Testing News API Integration...")
+        
+        # Test if we can access the news API key (indirectly through bot status)
+        success, data = self.run_test("News API Environment Check", "GET", "api/bot/status")
+        
+        if success:
+            print("   ✅ Backend is accessible for news API testing")
+            
+            # Test news category specifically
+            success_news, news_data = self.run_test("News Category Commands", "GET", "api/commands/news")
+            
+            if success_news and news_data:
+                commands = news_data.get("commands", [])
+                if len(commands) >= 6:
+                    print(f"   ✅ News commands properly configured: {len(commands)} commands")
+                    return True, news_data
+                else:
+                    print(f"   ❌ Insufficient news commands: {len(commands)}")
+                    return False, {}
+            else:
+                print("   ❌ Failed to get news category commands")
+                return False, {}
+        else:
+            print("   ❌ Backend not accessible for news testing")
+            return False, {}
         """Test CORS headers are present"""
         try:
             response = requests.options(f"{self.base_url}/api/bot/status")
