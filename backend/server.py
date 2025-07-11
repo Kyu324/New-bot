@@ -342,6 +342,15 @@ async def get_commands():
         {"name": "tags", "category": "advanced", "description": "Tag system"},
         {"name": "afk", "category": "advanced", "description": "AFK system"},
         {"name": "music", "category": "advanced", "description": "Music commands"},
+        
+        # News Commands
+        {"name": "news", "category": "news", "description": "Get latest news from US, UK, or India"},
+        {"name": "news us", "category": "news", "description": "Get US news"},
+        {"name": "news uk", "category": "news", "description": "Get UK news"},
+        {"name": "news india", "category": "news", "description": "Get India news"},
+        {"name": "news us tech", "category": "news", "description": "Get US technology news"},
+        {"name": "news uk business", "category": "news", "description": "Get UK business news"},
+        {"name": "news india sports", "category": "news", "description": "Get India sports news"},
     ]
     
     return {"commands": commands, "total": len(commands)}
