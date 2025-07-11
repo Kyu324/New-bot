@@ -728,7 +728,8 @@ async def help_command(ctx, category: str = None):
                 "users": "User management commands",
                 "utility": "Utility commands",
                 "fun": "Fun commands",
-                "economy": "Economy commands"
+                "economy": "Economy commands",
+                "news": "News commands (US, UK, India news)"
             }
             
             for cat, desc in categories.items():
