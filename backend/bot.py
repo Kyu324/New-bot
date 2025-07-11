@@ -43,6 +43,16 @@ intents.guilds = True
 intents.voice_states = True
 intents.presences = True
 
+def get_prefix(bot, message):
+    """Get server prefix"""
+    if not message.guild:
+        return "!"
+    
+    server_data = servers_collection.find_one({"server_id": str(message.guild.id)})
+    if server_data:
+        return server_data.get("prefix", "!")
+    return "!"
+
 # Bot setup
 bot = commands.Bot(
     command_prefix=get_prefix,
@@ -50,8 +60,6 @@ bot = commands.Bot(
     application_id=APPLICATION_ID,
     help_command=None
 )
-
-def get_prefix(bot, message):
     """Get server prefix"""
     if not message.guild:
         return "!"
