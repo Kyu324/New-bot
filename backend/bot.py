@@ -18,8 +18,8 @@ logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
 
 # Bot configuration
-TOKEN = "MTE2MjA1MzM3OTMxMzM4MTUyOA.Gqbogw.-VgCiUDpRBRHYRj6LOON2HIRcDfXKu7CorjqYw"
-APPLICATION_ID = "1162053379313381528"
+TOKEN = os.environ.get('DISCORD_BOT_TOKEN', 'MTE2MjA1MzM3OTMxMzM4MTUyOA.Gqbogw.-VgCiUDpRBRHYRj6LOON2HIRcDfXKu7CorjqYw')
+APPLICATION_ID = os.environ.get('DISCORD_APP_ID', '1162053379313381528')
 
 # MongoDB connection
 MONGO_URL = os.environ.get('MONGO_URL', 'mongodb://localhost:27017')
