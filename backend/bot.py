@@ -21,6 +21,7 @@ logger = logging.getLogger(__name__)
 # Bot configuration
 TOKEN = os.environ.get('DISCORD_BOT_TOKEN', 'MTE2MjA1MzM3OTMxMzM4MTUyOA.Gqbogw.-VgCiUDpRBRHYRj6LOON2HIRcDfXKu7CorjqYw')
 APPLICATION_ID = os.environ.get('DISCORD_APP_ID', '1162053379313381528')
+NEWS_API_KEY = os.environ.get('NEWS_API_KEY', '8ebf508a6ce04f47821b7fd21e7ae5e4')
 
 # MongoDB connection
 MONGO_URL = os.environ.get('MONGO_URL', 'mongodb://localhost:27017')
